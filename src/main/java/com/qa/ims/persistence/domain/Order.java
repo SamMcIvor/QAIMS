@@ -3,14 +3,13 @@ package com.qa.ims.persistence.domain;
 public class Order {
 
 	private String id;
-	private String fk_customerid;
-	private String fk_itemid;
+	private String customerid;
+
 	
-	public Order(String id, String fk_customerid, String fk_itemid) {
+	public Order(String id, String customerid) {
 		super();
 		this.id = id;
-		this.fk_customerid = fk_customerid;
-		this.fk_itemid = fk_itemid;
+		this.customerid = customerid;
 	}
 
 	
@@ -23,21 +22,14 @@ public class Order {
 		this.id = id;
 	}
 
-	public String getFk_customerid() {
-		return fk_customerid;
+	public String getCustomerID() {
+		return customerid;
 	}
 
-	public void setFk_customerid(String fk_customerid) {
-		this.fk_customerid = fk_customerid;
+	public void setCustomerID(String customerid) {
+		this.customerid = customerid;
 	}
 
-	public String getFk_itemid() {
-		return fk_itemid;
-	}
-
-	public void setFk_itemid(String fk_itemid) {
-		this.fk_itemid = fk_itemid;
-	}
 
 	
 
@@ -46,16 +38,15 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "id: " + id + ", customer id: " + fk_customerid + ", item id: " + fk_itemid;
+		return "id: " + id + ", customer id: " + customerid;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((fk_customerid == null) ? 0 : fk_customerid.hashCode());
+		result = prime * result + ((customerid == null) ? 0 : customerid.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((fk_itemid == null) ? 0 : fk_itemid.hashCode());
 		return result;
 	}
 
@@ -68,20 +59,15 @@ public class Order {
 		if (getClass() != obj.getClass())
 			return false;
 		Order other = (Order) obj;
-		if (getFk_customerid() == null) {
-			if (other.getFk_customerid() != null)
+		if (getCustomerID() == null) {
+			if (other.getCustomerID() != null)
 				return false;
-		} else if (!getFk_customerid().equals(other.getFk_customerid()))
+		} else if (!getCustomerID().equals(other.getCustomerID()))
 			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
-			return false;
-		if (fk_itemid == null) {
-			if (other.fk_itemid != null)
-				return false;
-		} else if (!fk_itemid.equals(other.fk_itemid))
 			return false;
 		return true;
 	}

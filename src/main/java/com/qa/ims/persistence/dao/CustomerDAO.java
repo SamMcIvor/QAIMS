@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.qa.ims.persistence.domain.Customer;
+import com.qa.ims.persistence.domain.OrderItem;
 import com.qa.ims.utils.DBUtils;
 
 public class CustomerDAO implements Dao<Customer> {
@@ -83,10 +84,10 @@ public class CustomerDAO implements Dao<Customer> {
 	}
 
 	@Override
-	public Customer read(String id) {
+	public Customer read(String iD) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				PreparedStatement statement = connection.prepareStatement("SELECT * FROM customers WHERE id = ?");) {
-			statement.setString(1, id);
+			statement.setString(1, iD);
 			try (ResultSet resultSet = statement.executeQuery();) {
 				resultSet.next();
 				return modelFromResultSet(resultSet);
@@ -125,19 +126,25 @@ public class CustomerDAO implements Dao<Customer> {
 	/**
 	 * Deletes a customer in the database
 	 * 
-	 * @param id - id of the customer
+	 * @param iD - id of the customer
 	 */
 	@Override
-	public int delete(String id) {
+	public int delete(String iD) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				PreparedStatement statement = connection.prepareStatement("DELETE FROM customers WHERE id = ?");) {
-			statement.setString(1, id);
+			statement.setString(1, iD);
 			return statement.executeUpdate();
 		} catch (Exception e) {
 			LOGGER.debug(e);
 			LOGGER.error(e.getMessage());
 		}
 		return 0;
+	}
+
+	@Override
+	public OrderItem additem(OrderItem orderItem) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

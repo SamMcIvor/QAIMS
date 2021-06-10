@@ -8,9 +8,11 @@ import com.qa.ims.controller.CrudController;
 import com.qa.ims.controller.CustomerController;
 import com.qa.ims.controller.ItemController;
 import com.qa.ims.controller.OrderController;
+import com.qa.ims.controller.OrderItemController;
 import com.qa.ims.persistence.dao.CustomerDAO;
 import com.qa.ims.persistence.dao.ItemDAO;
 import com.qa.ims.persistence.dao.OrderDAO;
+import com.qa.ims.persistence.dao.OrderItemDAO;
 import com.qa.ims.persistence.domain.Domain;
 import com.qa.ims.utils.DBUtils;
 import com.qa.ims.utils.Utils;
@@ -24,6 +26,7 @@ public class IMS {
 	private final CustomerController customers;
 	private final ItemController items;
 	private final OrderController orders;
+	private final OrderItemController orderitem;
 
 	public IMS() {
 		this.utils = new Utils();
@@ -33,6 +36,8 @@ public class IMS {
 		this.items = new ItemController(itemDAO, utils);
 		final OrderDAO orderDAO = new OrderDAO();
 		this.orders = new OrderController(orderDAO, utils);
+		final OrderItemDAO orderitemDAO = new OrderItemDAO();
+		this.orderitem = new OrderItemController(orderitemDAO, utils);
 	}
 
 	public void imsSystem() {
@@ -66,6 +71,9 @@ public class IMS {
 			case ORDER:
 				active = this.orders;
 				break;
+			case EDIT_ORDER:
+				active = this.orderitem;
+				break;
 			case STOP:
 				return;
 			default:
@@ -73,15 +81,18 @@ public class IMS {
 			}
 
 			LOGGER.info(() ->"What would you like to do with " + domain.name().toLowerCase() + ":");
-
+			
 			Action.printActions();
 			Action action = Action.getAction(utils);
-
-			if (action == Action.RETURN) {
+			if (domain == Domain.EDIT_ORDER) {
+				changeDomain = true;}
+			else if (action == Action.RETURN) {
 				changeDomain = true;
 			} else {
 				doAction(active, action);
 			}
+			
+			
 		} while (!changeDomain);
 	}
 
@@ -105,5 +116,24 @@ public class IMS {
 			break;
 		}
 	}
-
+	public void editOrder(CrudController<?> crudController, Action action) {
+		switch (action) {
+		case ADD_ITEM:
+			crudController.additem();
+			break;
+		case ORDER_COST:
+			crudController.ordercost();
+			break;
+		case DELETE_ITEM:
+			crudController.delete();
+			break;
+		case RETURN:
+			break;
+		default:
+			break;
+		}
+	}
+	
 }
+
+

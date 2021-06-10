@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.qa.ims.persistence.domain.Order;
+import com.qa.ims.persistence.domain.OrderItem;
 import com.qa.ims.utils.DBUtils;
 
 public class OrderDAO implements Dao<Order> {
@@ -21,16 +22,10 @@ public class OrderDAO implements Dao<Order> {
 	@Override
 	public Order modelFromResultSet(ResultSet resultSet) throws SQLException {
 		String id = resultSet.getString("id");
-		String fk_customerid = resultSet.getString("fk_customerid");
-		String fk_itemid = resultSet.getString("fk_itemid");
-		return new Order(id, fk_customerid, fk_itemid);
+		String customerid = resultSet.getString("customerid");
+		return new Order(id, customerid);
 	}
 
-	/**
-	 * Reads all items from the database
-	 * 
-	 * @return A list of items
-	 */
 	@Override
 	public List<Order> readAll() {
 		try (Connection connection = DBUtils.getInstance().getConnection();
@@ -61,18 +56,12 @@ public class OrderDAO implements Dao<Order> {
 		return null;
 	}
 
-	/**
-	 * Creates an item in the database
-	 * 
-	 * @param item - takes in a item object. id will be ignored
-	 */
 	@Override
 	public Order create(Order order) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				PreparedStatement statement = connection
-						.prepareStatement("INSERT INTO orders(fk_customerid, fk_itemid) VALUES (?, ?)");) {
-			statement.setString(1, order.getFk_customerid());
-			statement.setString(2, order.getFk_itemid());
+						.prepareStatement("INSERT INTO orders(customerid) VALUES (?)");) {
+			statement.setString(1, order.getCustomerID());
 			statement.executeUpdate();
 			return readLatest();
 		} catch (Exception e) {
@@ -98,21 +87,13 @@ public class OrderDAO implements Dao<Order> {
 		return null;
 	}
 
-	/**
-	 * Updates a item in the database
-	 * 
-	 * @param item - takes in a item object, the id field will be used to
-	 *                 update that item in the database
-	 * @return
-	 */
 	@Override
 	public Order update(Order order) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				PreparedStatement statement = connection
-						.prepareStatement("UPDATE orders SET fk_customerid = ?, fk_itemid = ? WHERE id = ?");) {
-			statement.setString(1, order.getFk_customerid());
-			statement.setString(2, order.getFk_itemid());
-			statement.setString(3, order.getId());
+						.prepareStatement("UPDATE orders SET customerid = ?, itemid = ? WHERE id = ?");) {
+			statement.setString(1, order.getCustomerID());
+			statement.setString(2, order.getId());
 			statement.executeUpdate();
 			return read(order.getId());
 		} catch (Exception e) {
@@ -122,11 +103,6 @@ public class OrderDAO implements Dao<Order> {
 		return null;
 	}
 
-	/**
-	 * Deletes a item in the database
-	 * 
-	 * @param id - id of the item
-	 */
 	@Override
 	public int delete(String id) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
@@ -138,6 +114,12 @@ public class OrderDAO implements Dao<Order> {
 			LOGGER.error(e.getMessage());
 		}
 		return 0;
+	}
+
+	@Override
+	public OrderItem additem(OrderItem orderItem) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

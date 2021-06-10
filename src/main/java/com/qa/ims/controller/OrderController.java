@@ -37,10 +37,8 @@ public class OrderController implements CrudController<Order> {
 	@Override
 	public Order create() {
 		LOGGER.info("Please enter an customer id");
-		String fk_customerid = utils.getString();
-		LOGGER.info("Please enter an item id");
-		String fk_itemid = utils.getString();
-		Order order = orderDAO.create(new Order(null, fk_customerid, fk_itemid));
+		String customerid = utils.getString();
+		Order order = orderDAO.create(new Order(null, customerid));
 		LOGGER.info("Order created");
 		return order;
 	}
@@ -54,6 +52,19 @@ public class OrderController implements CrudController<Order> {
 
 	@Override
 	public Order update() {
+		return null;
+	}
+
+
+	@Override
+	public Order additem() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Order ordercost() {
 		// TODO Auto-generated method stub
 		return null;
 	}

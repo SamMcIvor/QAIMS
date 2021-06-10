@@ -8,13 +8,13 @@ public interface Dao<T> {
 
 	List<T> readAll();
 	
-	T read(Long id);
+	T read(String id);
 
 	T create(T t);
 
 	T update(T t);
 
-	int delete(long id);
+	int delete(String id);
 
 	T modelFromResultSet(ResultSet resultSet) throws SQLException;
 }

@@ -2,7 +2,7 @@ package com.qa.ims.persistence.domain;
 
 public class Customer {
 
-	private Long id;
+	private String id;
 	private String firstName;
 	private String surname;
 
@@ -11,17 +11,17 @@ public class Customer {
 		this.setSurname(surname);
 	}
 
-	public Customer(Long id, String firstName, String surname) {
+	public Customer(String id, String firstName, String surname) {
 		this.setId(id);
 		this.setFirstName(firstName);
 		this.setSurname(surname);
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

@@ -19,9 +19,9 @@ public class OrderItemDAO implements Dao<OrderItem> {
 	
 	@Override
 	public OrderItem modelFromResultSet(ResultSet resultSet) throws SQLException {
-		String id = resultSet.getString("id");
-		String orderid = resultSet.getString("orderid");
-		String itemid = resultSet.getString("itemid");
+		Long id = resultSet.getLong("id");
+		Long orderid = resultSet.getLong("orderid");
+		Long itemid = resultSet.getLong("itemid");
 		return new OrderItem(id, orderid, itemid);
 	}
 
@@ -29,7 +29,7 @@ public class OrderItemDAO implements Dao<OrderItem> {
 	public List<OrderItem> readAll() {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("SELECT * FROM order_items");) {
+				ResultSet resultSet = statement.executeQuery("SELECT * FROM order_items;");) {
 			List<OrderItem> orderItems = new ArrayList<>();
 			while (resultSet.next()) {
 				orderItems.add(modelFromResultSet(resultSet));
@@ -46,10 +46,10 @@ public class OrderItemDAO implements Dao<OrderItem> {
 		return new ArrayList<>();
 	}
 	
-	public List<OrderItem> readWhere(String orderid) {
+	public List<OrderItem> readWhere(Long orderid) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("SELECT * FROM order_items WHERE oid = " + orderid);) {
+				ResultSet resultSet = statement.executeQuery("SELECT * FROM order_items WHERE oid = " + orderid + ";");) {
 			List<OrderItem> orderItems = new ArrayList<>();
 			while (resultSet.next()) {
 				orderItems.add(modelFromResultSet(resultSet));
@@ -69,7 +69,7 @@ public class OrderItemDAO implements Dao<OrderItem> {
 	public OrderItem readLatest() {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("SELECT * FROM order_items ORDER BY id DESC LIMIT 1");) {
+				ResultSet resultSet = statement.executeQuery("SELECT * FROM order_items ORDER BY id DESC LIMIT 1;");) {
 			resultSet.next();
 			return modelFromResultSet(resultSet);
 		} catch (SQLException e) {
@@ -88,7 +88,7 @@ public class OrderItemDAO implements Dao<OrderItem> {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();) {
 			statement.executeUpdate("INSERT INTO order_items(orderid, itemid) VALUES(" 
-				+ orderItem.getOrderID() + ", " + orderItem.getItemID() + ")");
+				+ orderItem.getOrderID() + ", " + orderItem.getItemID() + ");");
 			return readLatest();
 		} catch (SQLException e) {
 			LOGGER.debug(e);
@@ -101,10 +101,10 @@ public class OrderItemDAO implements Dao<OrderItem> {
 		return null;
 	}
 	
-	public OrderItem readOrderItem(String id) {
+	public OrderItem readOrderItem(Long id) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("SELECT * FROM order_items WHERE id = " + id);) {
+				ResultSet resultSet = statement.executeQuery("SELECT * FROM order_items WHERE orderid = " + id + ";");) {
 			resultSet.next();
 			return modelFromResultSet(resultSet);
 		} catch (SQLException e) {
@@ -123,8 +123,7 @@ public class OrderItemDAO implements Dao<OrderItem> {
 	public OrderItem additem(OrderItem orderItem) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();) {
-			statement.executeUpdate("UPDATE order_items SET orderid = " + orderItem.getOrderID() + ", itemid = "
-				+ orderItem.getItemID());
+			statement.executeUpdate("INSERT INTO ORDER_ITEMS (orderid, itemid) VALUES (" + orderItem.getOrderID() + ", " + orderItem.getItemID() + ");");
 			return readOrderItem(orderItem.getOrderID());
 		} catch (SQLException e) {
 			LOGGER.debug(e);
@@ -137,24 +136,25 @@ public class OrderItemDAO implements Dao<OrderItem> {
 		return null;
 	}
 
-	@Override
-	public int delete(String id) {
-		try (Connection connection = DBUtils.getInstance().getConnection();
-				Statement statement = connection.createStatement();) {
-			return statement.executeUpdate("delete from order_items where id = " + id);
-		} catch (SQLException e) {
-			LOGGER.debug(e);
-			LOGGER.error(e.getMessage());
-		} catch (Exception e) {
-			LOGGER.error("Generic Exception - Something went seriously wrong.");
-			LOGGER.debug(e);
-			LOGGER.error(e.getMessage());
-		}
-		return 0;
-	}
+
+    public boolean deleteIFO(Long orderId, Long itemId) {
+        try (Connection connection = DBUtils.getInstance().getConnection();
+                Statement statement = connection.createStatement();) {
+            statement.executeUpdate("delete from order_items where orderid = " + orderId + " and itemid = " + itemId + ";");
+            return true;
+        } catch (SQLException e) {
+            LOGGER.debug(e);
+            LOGGER.error(e.getMessage());
+        } catch (Exception e) {
+            LOGGER.error("Generic Exception - Something went seriously wrong.");
+            LOGGER.debug(e);
+            LOGGER.error(e.getMessage());
+        }
+        return false;
+    }
 
 	@Override
-	public OrderItem read(String id) {
+	public OrderItem read(Long id) {
 		return null;
 	}
 
@@ -163,7 +163,30 @@ public class OrderItemDAO implements Dao<OrderItem> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	public String calculateOrderCost(Long orderid) {
+        try (Connection connection = DBUtils.getInstance().getConnection();
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement
+                        .executeQuery("SELECT sum(items.value) as value FROM order_items, items WHERE order_items.orderid = "
+                                + orderid + " and items.id = order_items.itemid;");) {
+            if (resultSet.next()) {
+                return resultSet.getString(1);        
+            }
+        } catch (SQLException e) {
+            LOGGER.debug(e);
+            LOGGER.error(e.getMessage());
+        } catch (Exception e) {
+            LOGGER.error("Generic Exception - Something went seriously wrong.");
+            LOGGER.debug(e);
+            LOGGER.error(e.getMessage());
+        }
+        return "-1";
+    }
 
-	
-	
+	@Override
+	public int delete(Long id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

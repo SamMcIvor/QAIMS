@@ -33,10 +33,16 @@ public enum Action {
 	/**
 	 * Prints out all possible actions
 	 */
-	public static void printActions() {
-		for (Action action : Action.values()) {
-			LOGGER.info(action.getDescription());
-		}
+	public static void printActions(boolean menuType) {
+        for (Action action : Action.values()) {
+            if (menuType
+                    && (action.name() == "ADD_ITEM" || action.name() == "ORDER_COST" || action.name() == "DELETE_ITEM")) {
+                LOGGER.info(action.getDescription());
+            } else if (!menuType
+                    && !(action.name() == "ADD_ITEM" || action.name() == "ORDER_COST" || action.name() == "DELETE_ITEM")) {
+                LOGGER.info(action.getDescription());
+            }
+        }
 	}
 
 	/**

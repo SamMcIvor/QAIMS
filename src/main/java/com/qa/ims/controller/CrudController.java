@@ -16,7 +16,7 @@ public interface CrudController<T> {
 
 	int delete();
 	
-	T additem();
+	void additem();
 	
-	T ordercost();
+	void ordercost();
 }

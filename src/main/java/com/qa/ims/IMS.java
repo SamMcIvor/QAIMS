@@ -22,7 +22,7 @@ public class IMS {
 	public static final Logger LOGGER = LogManager.getLogger();
 
 	private final Utils utils;
-	
+
 	private final CustomerController customers;
 	private final ItemController items;
 	private final OrderController orders;
@@ -80,60 +80,52 @@ public class IMS {
 				break;
 			}
 
-			LOGGER.info(() ->"What would you like to do with " + domain.name().toLowerCase() + ":");
-			
-			Action.printActions();
-			Action action = Action.getAction(utils);
+			LOGGER.info(() -> "What would you like to do with " + domain.name().toLowerCase() + ":");
+
 			if (domain == Domain.EDIT_ORDER) {
-				changeDomain = true;}
-			else if (action == Action.RETURN) {
-				changeDomain = true;
-			} else {
-				doAction(active, action);
-			}
-			
-			
+                Action.printActions(true);
+            } else {
+                Action.printActions(false);
+            }
+
+            Action action = Action.getAction(utils);
+
+            if (action == Action.RETURN) {
+                changeDomain = true;
+            } else {
+                doAction(active, action);
+            }
 		} while (!changeDomain);
 	}
 
 	public void doAction(CrudController<?> crudController, Action action) {
-		switch (action) {
-		case CREATE:
-			crudController.create();
-			break;
-		case READ:
-			crudController.readAll();
-			break;
-		case UPDATE:
-			crudController.update();
-			break;
-		case DELETE:
-			crudController.delete();
-			break;
-		case RETURN:
-			break;
-		default:
-			break;
-		}
-	}
-	public void editOrder(CrudController<?> crudController, Action action) {
-		switch (action) {
-		case ADD_ITEM:
-			crudController.additem();
-			break;
-		case ORDER_COST:
-			crudController.ordercost();
-			break;
-		case DELETE_ITEM:
-			crudController.delete();
-			break;
-		case RETURN:
-			break;
-		default:
-			break;
-		}
-	}
-	
+        switch (action) {
+            case CREATE:
+                crudController.create();
+                break;
+            case READ:
+                crudController.readAll();
+                break;
+            case UPDATE:
+                crudController.update();
+                break;
+            case DELETE:
+                crudController.delete();
+                break;
+            case ADD_ITEM:
+                crudController.additem();
+                break;
+            case ORDER_COST:
+                crudController.ordercost();
+                break;
+            case DELETE_ITEM:
+                crudController.delete();
+                break;
+            case RETURN:
+                break;
+            default:
+                break;
+        }
+    }
+
 }
-
-

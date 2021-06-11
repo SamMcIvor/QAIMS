@@ -2,40 +2,42 @@ package com.qa.ims.persistence.domain;
 
 public class OrderItem {
 	
-	protected String id, orderid, itemid;
+	protected Long id, orderid, itemid;
 	
-	public OrderItem(String orderid, String itemid) {
-		this.setOrderID(orderid);
-		this.setItemID(itemid);
+	
+	
+	public OrderItem(Long orderid, Long itemid) {
+		this.orderid = orderid;
+		this.itemid = itemid;
 	}
-	
-	public OrderItem(String id, String orderid, String itemid) {
+
+	public OrderItem(Long id, Long orderid, Long itemid) {
 		this.setId(id);
 		this.setOrderID(orderid);
 		this.setItemID(itemid);
 	}
 	
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 	
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	
-	public String getOrderID() {
+	public Long getOrderID() {
 		return orderid;
 	}
 	
-	public void setOrderID(String orderid) {
+	public void setOrderID(Long orderid) {
 		this.orderid = orderid;
 	}
 	
-	public String getItemID() {
+	public Long getItemID() {
 		return itemid;
 	}
 	
-	public void setItemID(String itemid) {
+	public void setItemID(Long itemid) {
 		this.itemid = itemid;
 	}
 	
@@ -44,15 +46,6 @@ public class OrderItem {
 		return "id: " + id + ", order id:" + orderid + ", item id:" + itemid;
 	}
 	
-	@Override 
-	public int hashCode() {
-		final int prime = 5;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((orderid == null) ? 0 : orderid.hashCode());
-		result = prime * result + ((itemid == null) ? 0 : itemid.hashCode());
-		return result;
-	}
 	
 	@Override
 	public boolean equals(Object obj) {

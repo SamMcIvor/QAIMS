@@ -58,7 +58,7 @@ public class CustomerController implements CrudController<Customer> {
 	@Override
 	public Customer update() {
 		LOGGER.info("Please enter the id of the customer you would like to update");
-		String id = utils.getString();
+		Long id = utils.getLong();
 		LOGGER.info("Please enter a first name");
 		String firstName = utils.getString();
 		LOGGER.info("Please enter a surname");
@@ -76,20 +76,20 @@ public class CustomerController implements CrudController<Customer> {
 	@Override
 	public int delete() {
 		LOGGER.info("Please enter the id of the customer you would like to delete");
-		String id = utils.getString();
+		Long id = utils.getLong();
 		return customerDAO.delete(id);
 	}
 
 	@Override
-	public Customer additem() {
+	public void additem() {
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 	@Override
-	public Customer ordercost() {
+	public void ordercost() {
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 }

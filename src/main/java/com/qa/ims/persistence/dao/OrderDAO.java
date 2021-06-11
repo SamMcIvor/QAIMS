@@ -21,8 +21,8 @@ public class OrderDAO implements Dao<Order> {
 
 	@Override
 	public Order modelFromResultSet(ResultSet resultSet) throws SQLException {
-		String id = resultSet.getString("id");
-		String customerid = resultSet.getString("customerid");
+		Long id = resultSet.getLong("id");
+		Long customerid = resultSet.getLong("customerid");
 		return new Order(id, customerid);
 	}
 
@@ -61,7 +61,7 @@ public class OrderDAO implements Dao<Order> {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				PreparedStatement statement = connection
 						.prepareStatement("INSERT INTO orders(customerid) VALUES (?)");) {
-			statement.setString(1, order.getCustomerID());
+			statement.setLong(1, order.getCustomerID());
 			statement.executeUpdate();
 			return readLatest();
 		} catch (Exception e) {
@@ -72,10 +72,10 @@ public class OrderDAO implements Dao<Order> {
 	}
 
 	@Override
-	public Order read(String id) {
+	public Order read(Long id) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				PreparedStatement statement = connection.prepareStatement("SELECT * FROM orders WHERE id = ?");) {
-			statement.setString(1, id);
+			statement.setLong(1, id);
 			try (ResultSet resultSet = statement.executeQuery();) {
 				resultSet.next();
 				return modelFromResultSet(resultSet);
@@ -92,8 +92,8 @@ public class OrderDAO implements Dao<Order> {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				PreparedStatement statement = connection
 						.prepareStatement("UPDATE orders SET customerid = ?, itemid = ? WHERE id = ?");) {
-			statement.setString(1, order.getCustomerID());
-			statement.setString(2, order.getId());
+			statement.setLong(1, order.getCustomerID());
+			statement.setLong(2, order.getId());
 			statement.executeUpdate();
 			return read(order.getId());
 		} catch (Exception e) {
@@ -104,10 +104,10 @@ public class OrderDAO implements Dao<Order> {
 	}
 
 	@Override
-	public int delete(String id) {
+	public int delete(Long id) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				PreparedStatement statement = connection.prepareStatement("DELETE FROM orders WHERE id = ?");) {
-			statement.setString(1, id);
+			statement.setLong(1, id);
 			return statement.executeUpdate();
 		} catch (Exception e) {
 			LOGGER.debug(e);

@@ -8,15 +8,15 @@ import com.qa.ims.persistence.domain.OrderItem;
 
 public interface Dao<T> {
 
-	List<T> readAll();
+	List<T> readAll() throws SQLException;
 	
-	T read(String id);
+	T read(Long id);
 
 	T create(T t);
 
 	T update(T t);
 
-	int delete(String id);
+	int delete(Long id);
 
 	T modelFromResultSet(ResultSet resultSet) throws SQLException;
 

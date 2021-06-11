@@ -2,11 +2,11 @@ package com.qa.ims.persistence.domain;
 
 public class Order {
 
-	private String id;
-	private String customerid;
+	private Long id;
+	private Long customerid;
 
 	
-	public Order(String id, String customerid) {
+	public Order(Long id, Long customerid) {
 		super();
 		this.id = id;
 		this.customerid = customerid;
@@ -14,19 +14,26 @@ public class Order {
 
 	
 	
-	public String getId() {
+	public Order(Long customerid) {
+		super();
+		this.customerid = customerid;
+	}
+
+
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getCustomerID() {
+	public Long getCustomerID() {
 		return customerid;
 	}
 
-	public void setCustomerID(String customerid) {
+	public void setCustomerID(Long customerid) {
 		this.customerid = customerid;
 	}
 

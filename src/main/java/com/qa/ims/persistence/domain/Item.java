@@ -11,6 +11,16 @@ public class Item {
 		this.id = id;
 		this.itemName = itemName;
 		this.value = value;}
+	
+	
+
+	public Item(String itemName, Double value) {
+		super();
+		this.itemName = itemName;
+		this.value = value;
+	}
+
+
 
 	public Long getId() {
 		return id;

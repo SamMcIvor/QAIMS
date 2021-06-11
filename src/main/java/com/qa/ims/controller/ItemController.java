@@ -80,4 +80,16 @@ public class ItemController implements CrudController<Item> {
 		return itemDAO.delete(id);
 	}
 
+	@Override
+	public void additem() {
+		// TODO Auto-generated method stub
+		return;
+	}
+
+	@Override
+	public void ordercost() {
+		// TODO Auto-generated method stub
+		return;
+	}
+
 }

@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.qa.ims.persistence.domain.Customer;
+import com.qa.ims.persistence.domain.OrderItem;
 import com.qa.ims.utils.DBUtils;
 
 public class CustomerDAO implements Dao<Customer> {
@@ -48,17 +49,14 @@ public class CustomerDAO implements Dao<Customer> {
 		return new ArrayList<>();
 	}
 
-	public Customer readLatest() {
-		try (Connection connection = DBUtils.getInstance().getConnection();
-				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("SELECT * FROM customers ORDER BY id DESC LIMIT 1");) {
-			resultSet.next();
-			return modelFromResultSet(resultSet);
-		} catch (Exception e) {
-			LOGGER.debug(e);
-			LOGGER.error(e.getMessage());
-		}
-		return null;
+	public Customer readLatest() throws SQLException {
+		Connection connection = DBUtils.getInstance().getConnection();
+		Statement statement = connection.createStatement();
+		ResultSet resultSet = statement.executeQuery("SELECT * FROM customers ORDER BY id DESC LIMIT 1");
+
+		resultSet.next();
+		return modelFromResultSet(resultSet);
+
 	}
 
 	/**
@@ -83,10 +81,10 @@ public class CustomerDAO implements Dao<Customer> {
 	}
 
 	@Override
-	public Customer read(Long id) {
+	public Customer read(Long iD) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				PreparedStatement statement = connection.prepareStatement("SELECT * FROM customers WHERE id = ?");) {
-			statement.setLong(1, id);
+			statement.setLong(1, iD);
 			try (ResultSet resultSet = statement.executeQuery();) {
 				resultSet.next();
 				return modelFromResultSet(resultSet);
@@ -128,7 +126,7 @@ public class CustomerDAO implements Dao<Customer> {
 	 * @param id - id of the customer
 	 */
 	@Override
-	public int delete(long id) {
+	public int delete(Long id) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				PreparedStatement statement = connection.prepareStatement("DELETE FROM customers WHERE id = ?");) {
 			statement.setLong(1, id);
@@ -138,6 +136,12 @@ public class CustomerDAO implements Dao<Customer> {
 			LOGGER.error(e.getMessage());
 		}
 		return 0;
+	}
+
+	@Override
+	public OrderItem additem(OrderItem orderItem) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
